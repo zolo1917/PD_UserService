@@ -3,7 +3,8 @@ import { validationResult } from "express-validator";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import { secretKey } from "../config/config";
-import { IUser, User } from "../Model/UserModel";
+import { getFirestoreInstance } from "../config/firebaseConfig";
+// import { User } from "../config/dbconfig";
 const router = express.Router();
 
 router.post("/login", async (req: Request, res: Response) => {
@@ -17,45 +18,60 @@ router.post("/login", async (req: Request, res: Response) => {
   }
   const { email, password } = req.body;
   try {
-    const user: IUser | null = await User.findOne({ email: email });
-    if (!user) {
+    const userRef = getFirestoreInstance().collection("Users");
+    const userDetails = await userRef
+      .where("email", "==", email)
+      .get()
+      .then((value: any) => {
+        const data = value.docs.map((doc: any) => doc.data());
+        return data;
+      });
+    console.log(userDetails);
+    if (userDetails.length > 1 || userDetails.length === 0) {
       res.status(401).json({ message: "Invalid UserId" });
       res.send();
       return;
     } else {
+      let userData = userDetails[0];
+      console.log(userData);
+      let user = {
+        email: userData.email || "",
+        hashedPassword: userData.hashedPassword,
+      };
       const isPasswordvalid = await bcrypt.compare(
         password,
         user.hashedPassword
       );
       if (!isPasswordvalid) {
         res.status(401).json({ message: "invalid password" });
-        res.send();
         return;
       }
       let key: string = secretKey();
-      await User.updateOne(
-        { id: user.id },
-        { $set: { last_logged_in: new Date(), updated_at: new Date() } },
-        { upsert: true }
-      );
-      const accessToken = jwt.sign({ user: user.id }, key, {
+
+      // await User.updateOne(
+      //   { id: "user.id " },
+      //   { $set: { last_logged_in: new Date(), updated_at: new Date() } },
+      //   { upsert: true }
+      // );
+      const accessToken = jwt.sign({ user: "user.id" }, key, {
         expiresIn: "15m",
       });
       const refreshToken = jwt.sign(
         {
-          user: user.id,
+          user: "user.id",
         },
         key,
         { expiresIn: "7d" }
       );
       res.status(200).json({
-        id: user.id,
+        id: "user.id",
         accessToken: accessToken,
         refreshToken: refreshToken,
         message: "Login successful",
       });
     }
-  } catch {
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Internal Server error" });
     res.send();
   }
@@ -69,22 +85,31 @@ router.post("/signup", async (req: Request, res: Response) => {
   }
   const { email, password } = req.body;
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser !== null) {
+    const UserRef = getFirestoreInstance().collection("Users");
+    const existingUsers = await UserRef.where("email", "==", email)
+      .get()
+      .then((value: any) => {
+        const data = value.docs.map((doc: any) => doc.data());
+        return data;
+      });
+    console.log(existingUsers);
+    if (existingUsers.length > 0) {
       res.status(400).json({ message: "This User already exists" });
-      res.send();
       return;
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const userId = await User.create({
+    await UserRef.add({
       email: email,
       hashedPassword: hashedPassword,
+      created_at: new Date(),
+    }).then((resp: any) => {
+      console.log(resp.data());
+      res
+        .status(200)
+        .json({ id: email, message: "User has been created successfully" });
     });
-    res
-      .status(200)
-      .json({ id: userId, message: "User has been created successfully" });
-    res.send();
+    return;
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });

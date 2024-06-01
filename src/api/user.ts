@@ -10,8 +10,7 @@ router.get("/user/:id", async (req: Request, res: Response) => {
     await userRef
       .doc(userId)
       .get()
-      .then((value: any) => {
-        console.log(value);
+      .then((value: ) => {
         const data = value.doc();
         res.status(200).send({ data });
       });

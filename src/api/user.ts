@@ -15,10 +15,6 @@ router.get("/user/:id", async (req: Request, res: Response) => {
         res.status(200).send({ data });
       });
     console.log(userId);
-    // let userDetails = await User.findOne({ id: userId });
-    // let userDetails = await User.doc(userId).get();
-    // console.log(userDetails);
-    // res.send(userDetails);
     return;
   } catch (err) {
     console.log(err);

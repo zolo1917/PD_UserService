@@ -20,7 +20,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   REGION: ${{secrets.REGION}} # TODO: update region of the Artifact Registry
-  APP_NAME: dashboard
+  APP_NAME: user-service
   DEPLOYMENT_NAME: docker-build-test # TODO: update to deployment name
   REGISTRY_NAME: ${{secrets.ARTIFACT_REGISTRY_NAME}} # TODO: update to Artifact Registry docker repository
   SERVICE_ACCOUNT_EMAIL: ${{secrets.SERVICE_ACCOUNT_EMAIL}}

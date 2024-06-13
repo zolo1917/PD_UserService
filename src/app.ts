@@ -14,7 +14,10 @@ app.use(authRouter);
 app.use(userRouter);
 app.use(roleRouter);
 loadConfig();
-const serviceAccount = JSON.parse(process.env.ACCOUNT_DETAILS || "");
+let serviceAccount = "";
+if (process.env.ACCOUNT_DETAILS) {
+  serviceAccount = JSON.parse(process.env.ACCOUNT_DETAILS);
+}
 initializieFirebaseApp(serviceAccount);
 const port = process.env.PORT || 3000;
 app.get("/", async (req: Request, res: Response) => {

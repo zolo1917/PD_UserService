@@ -1,8 +1,9 @@
 import express, { Request, Response } from "express";
 // import { User, updateProcessedData } from "../config/dbconfig";
 import { getFirestoreInstance, updateDataInDB } from "../config/firebaseConfig";
+import { getLogger } from "../config/config";
 const router = express.Router();
-
+const logger = getLogger();
 router.get("/user/:id", async (req: Request, res: Response) => {
   try {
     let userId = req.params.id;
@@ -14,10 +15,10 @@ router.get("/user/:id", async (req: Request, res: Response) => {
         const data = value.doc();
         res.status(200).send({ data });
       });
-    console.log(userId);
+    logger.info(userId);
     return;
   } catch (err) {
-    console.log(err);
+    logger.info(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -33,14 +34,14 @@ router.get("/", async (req: Request, resp: Response) => {
 router.post("/user", async (req: Request, res: Response) => {
   try {
     const data = req.body;
-    console.log(data);
+    logger.info(data);
     // await User.add(data);
     // await val();
     // await updateProcessedData();
     await updateDataInDB();
     res.send({ msg: "User Created" });
   } catch (err) {
-    console.log(err);
+    logger.info(err);
     res.status(500).json("internal server error");
   }
 });
@@ -52,7 +53,7 @@ router.put("/user/:id", async (req: Request, res: Response) => {
   // User.doc(userId)
   //   .update(userDetails)
   //   .then(() => {
-  //     console.log("entry succcess");
+  //     logger.info("entry succcess");
   //   });
   // await User.updateOne({ id: userId }, { $set: userDetails }, { upsert: true });
 });

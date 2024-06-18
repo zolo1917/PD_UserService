@@ -13,7 +13,7 @@ export function secretKey(): string {
 }
 
 export function setLogger(): any {
-  const env = process.env.ENV || "dev";
+  const env = process.env.CLOUD_ENV || "dev";
   const loggingWinston = new LoggingWinston();
   logger = createLogger({
     format: format.combine(format.splat(), format.simple()),

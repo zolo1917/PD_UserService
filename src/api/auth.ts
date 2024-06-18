@@ -2,11 +2,11 @@ import express, { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
-import { secretKey } from "../config/config";
+import { getLogger, secretKey } from "../config/config";
 import { getFirestoreInstance } from "../config/firebaseConfig";
 // import { User } from "../config/dbconfig";
 const router = express.Router();
-
+const logger = getLogger();
 router.post("/login", async (req: Request, res: Response) => {
   //TODO: Update the login method
   console.log("login Method called");

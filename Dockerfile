@@ -4,5 +4,4 @@ WORKDIR /UserService/
 COPY package.json ./
 RUN npm install
 COPY . .
-EXPOSE 80 443
 ENTRYPOINT ["npm", "start"]

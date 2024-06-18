@@ -1,21 +1,23 @@
 // import serviceAccount from "../../firebase-admin.json";
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { getLogger } from "./config";
 
 let app;
 let firebaseDb: any;
+const logger = getLogger();
 export const initializieFirebaseApp = (serviceAccount: any) => {
   try {
-    console.log("initializing firestore");
+    logger.info("initializing firestore");
     app = initializeApp({
       credential: cert(<ServiceAccount>serviceAccount),
       projectId: "my-test-apps-424418",
     });
-    console.log("Initialization complete");
+    logger.info("Initialization complete");
     firebaseDb = getFirestore(app, "firestore-base");
     return app;
   } catch (err) {
-    console.log(err);
+    logger.info(err);
   }
 };
 export const getFirestoreInstance = () => firebaseDb;
@@ -29,6 +31,6 @@ export const updateDataInDB = async () => {
       createdDate: new Date(),
     })
     .then((resp: any) => {
-      console.log(resp);
+      logger.info(resp);
     });
 };

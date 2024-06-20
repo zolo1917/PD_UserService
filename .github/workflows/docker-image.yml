@@ -59,4 +59,4 @@ jobs:
       # Push image to compute instance
       - name: Push to compute instance
         run: |-
-          gcloud compute instances update-container pd-userservice --container-image="$REGION-docker.pkg.dev/$PROJECT_ID/$REGISTRY_NAME/$APP_NAME:$GITHUB_SHA"
+          gcloud compute instances update-container pd-userservice --zone="us-central1-a" --container-image="$REGION-docker.pkg.dev/$PROJECT_ID/$REGISTRY_NAME/$APP_NAME:$GITHUB_SHA"

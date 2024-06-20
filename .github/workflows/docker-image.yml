@@ -55,3 +55,8 @@ jobs:
       - name: Publish
         run: |-
           docker push "$REGION-docker.pkg.dev/$PROJECT_ID/$REGISTRY_NAME/$APP_NAME:$GITHUB_SHA"
+
+      # Push image to compute instance
+      - name: Push to compute instance
+        run: |-
+          gcloud compute instances update-container pd-userservice --container-image="$REGION-docker.pkg.dev/$PROJECT_ID/$REGISTRY_NAME/$APP_NAME:$GITHUB_SHA"

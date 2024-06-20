@@ -9,7 +9,7 @@ const router = express.Router();
 const logger = getLogger();
 router.post("/login", async (req: Request, res: Response) => {
   //TODO: Update the login method
-  console.log("login Method called");
+  logger.info("login Method called");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array() });
@@ -26,14 +26,14 @@ router.post("/login", async (req: Request, res: Response) => {
         const data = value.docs.map((doc: any) => doc.data());
         return data;
       });
-    console.log(userDetails);
+    logger.info(userDetails);
     if (userDetails.length > 1 || userDetails.length === 0) {
       res.status(401).json({ message: "Invalid UserId" });
       res.send();
       return;
     } else {
       let userData = userDetails[0];
-      console.log(userData);
+      logger.info(userData);
       let user = {
         email: userData.email || "",
         hashedPassword: userData.hashedPassword,
@@ -71,7 +71,7 @@ router.post("/login", async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    logger.info(err);
     res.status(500).json({ message: "Internal Server error" });
     res.send();
   }
@@ -92,7 +92,7 @@ router.post("/signup", async (req: Request, res: Response) => {
         const data = value.docs.map((doc: any) => doc.data());
         return data;
       });
-    console.log(existingUsers);
+    logger.info(existingUsers);
     if (existingUsers.length > 0) {
       res.status(400).json({ message: "This User already exists" });
       return;
@@ -104,14 +104,14 @@ router.post("/signup", async (req: Request, res: Response) => {
       hashedPassword: hashedPassword,
       created_at: new Date(),
     }).then((resp: any) => {
-      console.log(resp.data());
+      logger.info(resp.data());
       res
         .status(200)
         .json({ id: email, message: "User has been created successfully" });
     });
     return;
   } catch (err) {
-    console.log(err);
+    logger.info(err);
     res.status(500).json({ message: "Internal server error" });
     return;
   }

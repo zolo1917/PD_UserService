@@ -17,7 +17,6 @@ const logger = getLogger();
 loadConfig();
 let serviceAccount = "";
 if (process.env.ACCOUNT_DETAILS) {
-  logger.info(process.env.ACCOUNT_DETAILS);
   serviceAccount = JSON.parse(process.env.ACCOUNT_DETAILS.toString());
 }
 initializieFirebaseApp(serviceAccount);

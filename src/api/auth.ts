@@ -71,7 +71,7 @@ router.post("/login", async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    logger.info(err);
+    logger.info("Error: ", err);
     res.status(500).json({ message: "Internal Server error" });
     res.send();
   }
@@ -111,7 +111,7 @@ router.post("/signup", async (req: Request, res: Response) => {
     });
     return;
   } catch (err) {
-    logger.info(err);
+    logger.info("Error : {} ", err);
     res.status(500).json({ message: "Internal server error" });
     return;
   }

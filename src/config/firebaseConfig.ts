@@ -1,4 +1,3 @@
-// import serviceAccount from "../../firebase-admin.json";
 import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getLogger } from "./config";

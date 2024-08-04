@@ -31,21 +31,6 @@ router.get("/", async (req: Request, resp: Response) => {
   });
 });
 
-router.post("/user", async (req: Request, res: Response) => {
-  try {
-    const data = req.body;
-    logger.info(data);
-    // await User.add(data);
-    // await val();
-    // await updateProcessedData();
-    await updateDataInDB();
-    res.send({ msg: "User Created" });
-  } catch (err) {
-    logger.info(err);
-    res.status(500).json("internal server error");
-  }
-});
-
 router.put("/user/:id", async (req: Request, res: Response) => {
   let userId = req.params.id;
   delete req.body.id;

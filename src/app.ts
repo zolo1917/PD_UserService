@@ -27,7 +27,6 @@ const port = process.env.PORT || 3000;
 app.get("/", async (req: Request, res: Response) => {
   res.send({ message: "The User/Auth Service is up" });
 });
-console.log(fs.readFileSync(__dirname + "/server.key", "utf-8"));
 const httpsCredentials = {
   key: fs.readFileSync(__dirname + "/server.key", "utf-8"),
   cert: fs.readFileSync(__dirname + "/server.cert", "utf-8"),

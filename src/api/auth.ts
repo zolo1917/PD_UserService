@@ -54,7 +54,7 @@ router.post("/login", async (req: Request, res: Response) => {
       //   { upsert: true }
       // );
       const accessToken = jwt.sign({ user: "user.id" }, key, {
-        expiresIn: "15m",
+        expiresIn: "1440m",
       });
       const refreshToken = jwt.sign(
         {

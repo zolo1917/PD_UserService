@@ -53,18 +53,18 @@ router.post("/login", async (req: Request, res: Response) => {
       //   { $set: { last_logged_in: new Date(), updated_at: new Date() } },
       //   { upsert: true }
       // );
-      const accessToken = jwt.sign({ user: "user.id" }, key, {
+      const accessToken = jwt.sign({ user: userData.id }, key, {
         expiresIn: "1440m",
       });
       const refreshToken = jwt.sign(
         {
-          user: "user.id",
+          user: userData.id,
         },
         key,
         { expiresIn: "7d" }
       );
       res.status(200).json({
-        id: "user.id",
+        id: userData.id,
         accessToken: accessToken,
         refreshToken: refreshToken,
         message: "Login successful",

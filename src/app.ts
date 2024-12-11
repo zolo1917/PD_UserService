@@ -8,7 +8,6 @@ import https from "https";
 import fs from "fs";
 import cors from "cors";
 import { initializieFirebaseApp } from "./config/firebaseConfig";
-// import { initializieFirebaseApp } from "./config/dbconfig";
 const app: Express = express();
 app.use(cors());
 app.use(express.json());

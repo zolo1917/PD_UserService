@@ -23,10 +23,12 @@ router.post("/login", async (req: Request, res: Response) => {
       .where("email", "==", email)
       .get()
       .then((value: any) => {
-        const data = value.docs.map((doc: any) => doc.data());
+        const data = value.docs.map((doc: any) => {
+          return { id: doc.id, ...doc.data() };
+        });
         return data;
       });
-    logger.info(userDetails);
+    logger.info(JSON.stringify(userDetails));
     if (userDetails.length > 1 || userDetails.length === 0) {
       res.status(401).json({ message: "Invalid UserId" });
       res.send();
@@ -63,6 +65,7 @@ router.post("/login", async (req: Request, res: Response) => {
         key,
         { expiresIn: "7d" }
       );
+      console.log(userData);
       res.status(200).json({
         id: userData.id,
         accessToken: accessToken,
